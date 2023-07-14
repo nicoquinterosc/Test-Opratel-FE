@@ -1,24 +1,16 @@
-# app
+# Test-Opratel-FE
 
-## Project setup
+## Configuración inicial
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Launch
+
+Para ejecutar el proyecto de manera local, se debe ejecutar
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+La aplicación estará disponible en http://localhost:8080
