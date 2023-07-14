@@ -72,6 +72,10 @@ export default {
         },
         async createUser() {
             try {
+                if (!this.valideEmail(this.email)) {
+                    this.error = 'Invalid email address.';
+                    return;
+                }
                 if (this.name && this.lastname && this.username && this.email && this.password) {
                     await axios.post('users/add', {
                         name: this.name,
@@ -87,7 +91,15 @@ export default {
                 }
             } catch (e) {
                 this.error = 'Error creating user.';
+                console.error('Error creating user:', e.message);
             }
+        },
+        valideEmail(email) {
+            const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            if (!email.match(validRegex)) {
+                return false;
+            }
+            return true;
         }
     }
 }
