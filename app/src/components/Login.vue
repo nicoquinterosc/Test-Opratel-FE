@@ -71,7 +71,7 @@ input {
 }
 
 .container.card {
-    width: 40%;
+    width: 30%;
     margin-top: 15%;
 }
 </style>

@@ -68,8 +68,6 @@ export default {
         },
     },
     async created() {
-        console.log("firstName", this.firstName)
-        console.log("lastName", this.lastName)
         this.getMenus();
     }
 }
