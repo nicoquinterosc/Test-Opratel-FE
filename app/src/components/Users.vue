@@ -11,7 +11,7 @@
                     <input type="text" class="form-control" placeholder="Filter user" aria-label="Filter user"
                         aria-describedby="basic-addon2" v-model="filter">
                     <div class="input-group-append">
-                        <button @click="getUsers(this.filter)" class="btn btn-outline-secondary" type="button">Filter</button>
+                        <button @click="getUsers(filter)" class="btn btn-outline-secondary" type="button">Filter</button>
                     </div>
                 </div>
                 <table class="table table-striped">
