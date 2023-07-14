@@ -5,10 +5,10 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto" v-if="!firstName">
                     <li class="nav-item">
-                        <router-link to="/" class="nav-link">Menus</router-link>
+                        <router-link to="/menus" class="nav-link">Menus</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/" class="nav-link">Users</router-link>
+                        <router-link to="/users" class="nav-link">Users</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link to="/login" class="nav-link">Login</router-link>
@@ -16,10 +16,10 @@
                 </ul>
                 <ul class="navbar-nav ml-auto" v-if="firstName">
                     <li class="nav-item">
-                        <router-link to="/login" class="nav-link">Menus</router-link>
+                        <router-link to="/menus" class="nav-link">Menus</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/" class="nav-link">Users</router-link>
+                        <router-link to="/users" class="nav-link">Users</router-link>
                     </li>
                     <li class="nav-item">
                         <a href="/login" v-on:click="handleClick" to="/" class="nav-link">Logout</a>
@@ -38,7 +38,7 @@ export default {
     name: 'Nav',
     methods: {
         handleClick() {
-            localStorage.removeItem('token');
+            localStorage.clear();
             this.$store.dispatch('firstName', null);
             this.$store.dispatch('lastName', null);
             this.$router.push('/');
