@@ -1,8 +1,12 @@
 <template>
     <div id="app">
         <div class="container">
+            <div class="new">
+                <button @click="openModalCreate()" type="button" class="btn btn-primary">New user</button>
+            </div>
 
-            <NewUserModal />
+            <CreateEditUserModal :mode="modalMode" :showModal="showModalCreateEdit" :selectedUser="selectedUser"
+                :modalInfo="modalInfo" @closeModal="closeModal" />
 
             <div class="list">
                 <h4>Users</h4>
@@ -35,7 +39,7 @@
                             <td class="d-flex justify-content-center">
                                 <a @click="openModalEdit(user)"><span
                                         class="material-symbols-rounded editIcon">edit</span></a>
-                                <a @click="openModalConfirm(user)"><span
+                                <a @click="openModalConfirmDelete(user)"><span
                                         class="material-symbols-rounded deleteIcon">delete</span></a>
                                 <a><span class="material-symbols-rounded listMenuIcon">list</span></a>
                             </td>
@@ -43,9 +47,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <EditUserModal :showModal="showModalCreateEdit" :selectedUser="selectedUser" :modalTitle="modalEditTitle"
-                @closeModal="closeModal" />
 
             <div v-if="showModalDelete" class="modal">
                 <div class="modal-content">
@@ -66,14 +67,12 @@
 <script>
 
 import axios from 'axios';
-import NewUserModal from './NewUserModal';
-import EditUserModal from './EditUserModal';
+import CreateEditUserModal from './CreateEditUserModal';
 
 export default {
     name: 'Users',
     components: {
-        NewUserModal,
-        EditUserModal
+        CreateEditUserModal
     },
     data() {
         return {
@@ -90,21 +89,46 @@ export default {
             },
             error: '',
             filter: '',
-            modalEditTitle: 'Edit user'
+            modalInfo: {
+                title: '',
+                confirmButton: ''
+            },
+            modalMode: ''
         }
     },
+    async created() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            this.$router.push('/login');
+        }
+        this.getUsers();
+    },
     methods: {
-        openModalConfirm(user) {
+        openModalCreate() {
+            this.modalMode = 'create';
+            this.modalInfo = {
+                title: 'Add new user',
+                confirmButton: 'Create'
+            }
+            this.selectedUser = null;
+            this.showModalCreateEdit = true;
+        },
+        openModalEdit(user) {
+            this.modalMode = 'edit';
+            this.modalInfo = {
+                title: 'Edit user',
+                confirmButton: 'Edit',
+            }
+            this.selectedUser = Object.assign({}, user);
+            this.showModalCreateEdit = true;
+        },
+        openModalConfirmDelete(user) {
             this.selectedUser = user;
             this.showModalDelete = true;
         },
-        openModalEdit(user) {
-            this.selectedUser = Object.assign({}, user);
-            console.log("Seleccionando user:", this.selectedUser);
-            this.showModalCreateEdit = true;
-        },
         closeModal() {
             this.showModalCreateEdit = false;
+            this.getUsers();
         },
         async getUsers(filter) {
             let url = '';
@@ -132,13 +156,6 @@ export default {
         cancelDelete() {
             this.showModalDelete = false;
         },
-    },
-    async created() {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            this.$router.push('/login');
-        }
-        this.getUsers();
     }
 }
 </script>
