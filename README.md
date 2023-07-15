@@ -1,5 +1,11 @@
 # Test-Opratel-FE
 
+Para ejecutar los comandos posicionarse en el directorio /app
+
+```
+cd app
+```
+
 ## Configuración inicial
 ```
 npm install

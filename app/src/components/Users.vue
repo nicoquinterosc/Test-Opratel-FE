@@ -33,8 +33,10 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.email }}</td>
                             <td class="d-flex justify-content-center">
-                                <a><span class="material-symbols-rounded editIcon">edit</span></a>
-                                <a @click="openModalConfirm(user)"><span class="material-symbols-rounded deleteIcon">delete</span></a>
+                                <a @click="openModalEdit(user)"><span
+                                        class="material-symbols-rounded editIcon">edit</span></a>
+                                <a @click="openModalConfirm(user)"><span
+                                        class="material-symbols-rounded deleteIcon">delete</span></a>
                                 <a><span class="material-symbols-rounded listMenuIcon">list</span></a>
                             </td>
                         </tr>
@@ -42,18 +44,20 @@
                 </table>
             </div>
 
+            <EditUserModal :showModal="showModalCreateEdit" :selectedUser="selectedUser" :modalTitle="modalEditTitle"
+                @closeModal="closeModal" />
 
-            <div v-if="showModal" class="modal">
-            <div class="modal-content">
-                <h3> Are you sure? </h3>
-                <br>
+            <div v-if="showModalDelete" class="modal">
+                <div class="modal-content">
+                    <h3> Are you sure? </h3>
+                    <br>
 
-                <div class="d-flex justify-content-around">
-                    <button v-on:click="cancel" type="button" class="btn btn-secondary">Cancel</button>
-                    <button v-on:click="deleteUser(selectedUser)" type="button" class="btn btn-danger">Confirm</button>
+                    <div class="d-flex justify-content-around">
+                        <button v-on:click="cancelDelete" type="button" class="btn btn-secondary">Cancel</button>
+                        <button v-on:click="deleteUser(selectedUser)" type="button" class="btn btn-danger">Confirm</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </div>
     </div>
@@ -63,30 +67,44 @@
 
 import axios from 'axios';
 import NewUserModal from './NewUserModal';
+import EditUserModal from './EditUserModal';
 
 export default {
     name: 'Users',
     components: {
-        NewUserModal
+        NewUserModal,
+        EditUserModal
     },
     data() {
         return {
-            showModal: false,
+            showModalDelete: false,
+            showModalCreateEdit: false,
             users: null,
-            name: '',
-            lastname: '',
-            username: '',
-            email: '',
-            password: '',
+            selectedUser: null,
+            user: {
+                name: '',
+                lastname: '',
+                username: '',
+                email: '',
+                password: ''
+            },
             error: '',
             filter: '',
-            selectedUser: null
+            modalEditTitle: 'Edit user'
         }
     },
     methods: {
         openModalConfirm(user) {
             this.selectedUser = user;
-            this.showModal = true;
+            this.showModalDelete = true;
+        },
+        openModalEdit(user) {
+            this.selectedUser = user;
+            console.log("Seleccionando user:", this.selectedUser);
+            this.showModalCreateEdit = true;
+        },
+        closeModal() {
+            this.showModalCreateEdit = false;
         },
         async getUsers(filter) {
             let url = '';
@@ -105,14 +123,14 @@ export default {
         async deleteUser(userToDelete) {
             try {
                 await axios.delete(`users/delete/${userToDelete.id}`);
-                this.users = this.users.filter(user => user.id !== userToDelete.id) 
+                this.users = this.users.filter(user => user.id !== userToDelete.id)
             } catch (e) {
                 console.error(`Error to fetch: ${e.message}`)
             }
-            this.showModal = false;
+            this.showModalDelete = false;
         },
-        cancel() {
-            this.showModal = false;
+        cancelDelete() {
+            this.showModalDelete = false;
         },
     },
     async created() {
