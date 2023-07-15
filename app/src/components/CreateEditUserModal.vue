@@ -104,28 +104,9 @@ export default {
                 password: '',
             };
         },
-        async editUser() {
-            try {
-                if (this.user) {
-                    await axios.put(`users/update/${this.user.id}`, {
-                        name: this.user.name,
-                        lastname: this.user.lastname,
-                        username: this.user.username,
-                        email: this.user.email,
-                        password: this.user.password,
-                    });
-                    this.$refs.userForm.reset();
-                    this.closeModal();
-                } else {
-                    this.error = 'All fields must be completed.';
-                }
-            } catch (e) {
-                this.error = 'Error updating user.';
-            }
-        },
         async createUser() {
             try {
-                if (!this.valideEmail(this.user.email)) {
+                if (!this.validEmail(this.user.email)) {
                     this.error = 'Invalid email address.';
                     return;
                 }
@@ -143,11 +124,31 @@ export default {
                     this.error = 'All fields must be completed.';
                 }
             } catch (e) {
-                this.error = 'Error creating user.';
+                this.error = e.response?.data ? e.response?.data : 'Error creating user.';
                 console.error('Error creating user:', e.message);
             }
         },
-        valideEmail(email) {
+        async editUser() {
+            try {
+                if (this.user.name && this.user.lastname && this.user.username && this.user.email && this.user.password) {
+                    await axios.put(`users/update/${this.user.id}`, {
+                        name: this.user.name,
+                        lastname: this.user.lastname,
+                        username: this.user.username,
+                        email: this.user.email,
+                        password: this.user.password,
+                    });
+                    this.$refs.userForm.reset();
+                    this.closeModal();
+                } else {
+                    this.error = 'All fields must be completed.';
+                }
+            } catch (e) {
+                this.error = e.response?.data ? e.response?.data : 'Error updating user.';
+                console.log('Error updating user:', e.message);
+            }
+        },
+        validEmail(email) {
             const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
             if (!email.match(validRegex)) {
                 return false;

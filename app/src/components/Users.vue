@@ -104,6 +104,20 @@ export default {
         this.getUsers();
     },
     methods: {
+        async getUsers(filter) {
+            let url = '';
+            if (filter) {
+                url = `users/all?filter=${filter}`;
+            } else {
+                url = 'users/all';
+            }
+            try {
+                const response = await axios.get(url);
+                this.users = response.data.users;
+            } catch (e) {
+                console.error(`Error to fetch: ${e.message}`)
+            }
+        },
         openModalCreate() {
             this.modalMode = 'create';
             this.modalInfo = {
@@ -129,20 +143,6 @@ export default {
         closeModal() {
             this.showModalCreateEdit = false;
             this.getUsers();
-        },
-        async getUsers(filter) {
-            let url = '';
-            if (filter) {
-                url = `users/all?filter=${filter}`;
-            } else {
-                url = 'users/all';
-            }
-            try {
-                const response = await axios.get(url);
-                this.users = response.data.users;
-            } catch (e) {
-                console.error(`Error to fetch: ${e.message}`)
-            }
         },
         async deleteUser(userToDelete) {
             try {
