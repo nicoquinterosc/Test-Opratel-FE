@@ -99,7 +99,7 @@ export default {
             this.showModalDelete = true;
         },
         openModalEdit(user) {
-            this.selectedUser = user;
+            this.selectedUser = Object.assign({}, user);
             console.log("Seleccionando user:", this.selectedUser);
             this.showModalCreateEdit = true;
         },
