@@ -20,15 +20,10 @@
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Parent ID</th>
+                            <th scope="col">Children</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="(menu, i) in menus" :key="i">
-                            <th scope="row">{{ menu.id }}</th>
-                            <td>{{ menu.name }}</td>
-                            <td>{{ menu.parentId }}</td>
-                        </tr>
-                    </tbody>
+                    <MenuCollapsible v-for="(menu, i) in menus" :key="i" :menu="menu" />
                 </table>
             </div>
         </div>
@@ -39,6 +34,7 @@
 
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import MenuCollapsible from './MenuCollapsible';
 
 export default {
     name: 'Home',
@@ -47,6 +43,9 @@ export default {
             menus: null,
             filter: ''
         }
+    },
+    components: {
+        MenuCollapsible
     },
     computed: {
         ...mapGetters(['firstName', 'lastName'])
