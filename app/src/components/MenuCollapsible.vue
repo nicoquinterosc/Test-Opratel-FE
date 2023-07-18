@@ -10,16 +10,13 @@
                 </button>
             </td>
         </tr>
-        <template v-if="isOpen && hasChildren">
-            <tr v-for="(childMenu, i) in menu.children" :key="i">
-                <td>{{ childMenu.id }}</td>
-                <td>{{ childMenu.name }}</td>
-                <td>{{ childMenu.parentId }}</td>
-                <td>
-                    <MenuCollapsible :menu="childMenu" />
-                </td>
-            </tr>
-        </template>
+        <tr v-if="isOpen && hasChildren">
+            <td :colspan="4">
+                <table class="table table-striped">
+                    <MenuCollapsible v-for="(childMenu, i) in menu.children" :key="i" :menu="childMenu" />
+                </table>
+            </td>
+        </tr>
     </tbody>
 </template>
   
